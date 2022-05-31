@@ -1,48 +1,23 @@
 import "./App.scss";
-import {useConnect, useAccount, useContractRead, useEnsName, useDisconnect} from "wagmi";
-import devsABI from "./models/devsABI/abi";
+import {useConnect, useAccount } from "wagmi";
 import TwitterList from "./components/TwitterList";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
     const { data: account } = useAccount();
-    const { data: ensName } = useEnsName({ address: account?.address });
     const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
-    const { disconnect } = useDisconnect();
 
-
-    // const { data:nftHolder, error:readingContractError } = useContractRead({
-    //     addressOrName: "0x25ed58c027921E14D86380eA2646E3a1B5C55A8b",
-    //     contractInterface: devsABI
-    // }, "balanceOf", {
-    //     args: account?.address
-    // });
-    //
-    // if (nftHolder?._hex === 0x01) {
-    //     console.log("Owns D_D NFT");
-    // } else {
-    //     console.log("Does not own NFT");
-    // }
-    //
-    // if (readingContractError) {
-    //     console.log(readingContractError.message);
-    // }
-
-
-    if (account)  {
+    if (account?.address) {
         return (
             <>
-                <div>
-                    <button
-                        className="Connect-Button"
-                        onClick={disconnect}
-                    >
-                        {ensName ? ensName : account.address}
-                    </button>
-                </div>
-                <TwitterList/>
+              <Header address={account.address}/>
+              <TwitterList address={account.address}/>
+              <Footer/>
             </>
         );
     }
+
         return (
             <div className="App">
                 <main>
@@ -67,12 +42,9 @@ function App() {
 
                     {error && <div>{error.message}</div>}
                 </main>
-                <footer>
-                    <p>Made with <span>❤</span> by <a href="https://twitter.com/iamtatara" target="_blank" rel="noopener noreferrer" className="brand-color">Tatara.eth</a></p>
-                </footer>
+                <Footer/>
             </div>
         );
-
 }
 
 export default App;
